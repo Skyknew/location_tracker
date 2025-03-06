@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 
 class LocationHelper {
   /// Request location permission and return user location with city and country
-  Future<Map<String,dynamic>?> getuserLocation()async{
+  Future<Map<String,dynamic>?> getuserLocation() async{
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -11,6 +11,7 @@ class LocationHelper {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
+      print('Location services are disabled.');
       return null; // Location Service is not enabled !
     }
 
@@ -20,11 +21,13 @@ class LocationHelper {
       permission = await Geolocator.requestPermission();
 
       if (permission == LocationPermission.denied) {
+        print('Location permissions are denied.');
         return null; // Location Permission denied
       }
     }
 
     if (permission == LocationPermission.deniedForever){
+      print('Location permissions are permanently denied.');
       return null; //Permission are permanently denied
     }
 
@@ -53,6 +56,7 @@ class LocationHelper {
             'address':'${place.street}, ${place.locality}, ${place.country}',
           };
         } 
+        print('No placemarks found.');
         return null;
 
     } catch (e) {
